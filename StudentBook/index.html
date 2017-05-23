@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>StudentBook without routing</title>
+    <meta charset="utf-8" />
+    <script src="scripts/vendor/angular.js"></script>
+    <script src="scripts/vendor/lodash.js"></script>
+    <script src="scripts/app/app.js"></script>
+</head>
+<body ng-app="app" ng-controller="StudentBookController">
+Add a student <br/>
+First name:<br/>
+<input type="text" ng-model="inputName" ng-disabled="studentLimit"/><br/>
+Last name:<br/>
+<input type="text" ng-model="inputLastName" ng-disabled="studentLimit"/><br/>
+Gender:<br/>
+<input type="radio" name="inputGender" ng-model="inputGender" value="male"/>
+Male<br>
+<input type="radio" name="inputGender" ng-model="inputGender" value="female"/>
+Female<br>
+<button ng-click="submit()" ng-disabled="studentLimit">Submit</button>
+<div ng-repeat="student in students | orderBy: ['-gender','entryDate']">
+    {{student.firstName}}
+    {{student.lastName}}
+    {{student.gender}}
+    {{student.entryDate | date:'dd/MM/yyyy'}}
+</div>
+</body>
+</html>
