@@ -18,4 +18,16 @@ app.controller("StudentBookController",function($scope) {
         if ($scope.students.length >= 10)
             $scope.studentLimit = true;
     }
+
+    $scope.toggleMales = function () {
+        $scope.malesHidden = !$scope.malesHidden;
+    }
+
+    $scope.toggleFemales = function () {
+        $scope.femalesHidden = !$scope.femalesHidden;
+    }
+
+    $scope.sexFilter = function (student) {
+        return !$scope.malesHidden && student.gender === "male" || !$scope.femalesHidden && student.gender === "female";
+    }
 })
