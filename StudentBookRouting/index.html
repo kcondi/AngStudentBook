@@ -1,10 +1,16 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-	<meta charset="utf-8" />
+    <title>StudentBook with routing</title>
+    <meta charset="utf-8" />
+    <script src="scripts/vendor/angular.js"></script>
+    <script src="scripts/vendor/angular-local-storage.js"></script>
+    <script src="scripts/vendor/angular-ui-router.js"></script>
+    <script src="scripts/vendor/lodash.js"></script>
+    <script src="scripts/app/app.js"></script>
+    <base href="/"/>
 </head>
-<body>
-
+<body ng-app="app">
+    <div ui-view></div>
 </body>
 </html>
