@@ -23,7 +23,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
             <h1>These are the students:</h1>
             <div ng-repeat="student in students">
             {{student.firstName}} {{student.lastName}} 
-                <button ui-sref="student-details">Details</button>
+                <button ui-sref="student-details({lastName : student.lastName})">Details</button>
                 <button ng-click="deleteStudent(student)">Delete</button>
                 <br/>
             </div>
@@ -35,8 +35,11 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
                 url: "/student-details/:lastName",
                 controller: "StudentDetailsController",
                 template: `
+            Name:
             {{chosenStudent.firstName}}
             {{chosenStudent.lastName}}
+            <br/>
+            Grade:
             {{chosenStudent.grade}}
             <br/>
             <button ui-sref="list-all">Back to students</button>
@@ -49,12 +52,12 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
                 template: `
             Add a student <br/>
             First name:<br/>
-            <input type="text" ng-model="inputName" ng-disabled="studentLimit"/><br/>
+            <input type="text" ng-model="inputName"/><br/>
             Last name:<br/>
-            <input type="text" ng-model="inputLastName" ng-disabled="studentLimit"/><br/>
-             Grade:<br/>
+            <input type="text" ng-model="inputLastName"/><br/>
+             Grade (must be between 1 and 5):<br/>
             <input type="number" ng-model="inputGrade"/><br/>
-            <button ng-click="submit()">Add</button><br/>
+            <button ng-click="submit()" ng-disabled="inputName.length===0 || inputLastName.length===0 || !parseInt(inputGrade) || inputGrade < 1 || inputGrade > 5">Add</button><br/>
             <button ui-sref="list-all">Back to students</button>
          `
             });
@@ -78,14 +81,15 @@ app.controller("StudentListController",
     });
 
 app.controller("StudentDetailsController",
-    function($scope, localStorageService, $state, chosenStudent) {
+    function ($scope, localStorageService, $state, $stateParams) {
         var allStudents = angular.fromJson(localStorageService.get("students"));
-        $scope.chosenStudent = _.find(allStudents, student => student === chosenStudent);
+        $scope.chosenStudent = allStudents.find(student => student.lastName === $stateParams.lastName);
     });
 
 app.controller("AddStudentController",
     function ($scope, localStorageService) {
-        var allStudents=angular.fromJson(localStorageService.get("students"));
+        $scope.parseInt = parseInt;
+        var allStudents = angular.fromJson(localStorageService.get("students"));
         $scope.submit = function() {
             allStudents.push(
                 {
@@ -95,6 +99,7 @@ app.controller("AddStudentController",
                 });
             $scope.inputName = "";
             $scope.inputLastName = "";
+            $scope.inputGrade = null;
             localStorageService.set("students", angular.toJson(allStudents));
-        }
+        }      
     });
