@@ -32,7 +32,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
             <h1>These are the students:</h1>
             <div ng-repeat="student in students">
             {{student.firstName}} {{student.lastName}} 
-                <button ui-sref="student-details({lastName : student.lastName})">Details</button>
+                <button ui-sref="student-details({guid : student.guid})">Details</button>
                 <button ng-click="deleteStudent(student)">Delete</button>
                 <br/>
             </div>
@@ -41,10 +41,10 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
             })
         .state("student-details",
             {
-                url: "/student-details/:lastName",
+                url: "/student-details/:guid",
                 controller: "StudentDetailsController",
                 template: `
-            Name:
+            Name:         
             {{chosenStudent.firstName}}
             {{chosenStudent.lastName}}
             <br/>
@@ -92,16 +92,17 @@ app.controller("StudentListController",
 app.controller("StudentDetailsController",
     function ($scope, localStorageService, $state, $stateParams) {
         var allStudents = angular.fromJson(localStorageService.get("students"));
-        $scope.chosenStudent = allStudents.find(student => student.lastName === $stateParams.lastName);
+        $scope.chosenStudent = allStudents.find(student => student.guid === $stateParams.guid);
     });
 
 app.controller("AddStudentController",
-    function ($scope, localStorageService) {
+    function($scope, localStorageService) {
         $scope.parseInt = parseInt;
         var allStudents = angular.fromJson(localStorageService.get("students"));
         $scope.submit = function() {
             allStudents.push(
                 {
+                    guid: guid(),
                     firstName: $scope.inputName,
                     lastName: $scope.inputLastName,
                     grade: $scope.inputGrade
@@ -110,5 +111,15 @@ app.controller("AddStudentController",
             $scope.inputLastName = "";
             $scope.inputGrade = null;
             localStorageService.set("students", angular.toJson(allStudents));
-        }      
+        }
     });
+
+    function guid() {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return s4() + s4() + "-" + s4() + "-" + s4() + "-" +
+        s4() + "-" + s4() + s4() + s4();
+}
