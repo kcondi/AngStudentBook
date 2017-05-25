@@ -31,12 +31,12 @@ Hide male students:
 Hide female students:
 <input type="checkbox" name="checkboxFilterFemale" ng-model="hideCheckboxFemale" value="hideFemale" ng-change="toggleFemales()"/><br/>
     Search for students:<br />
-    <input type="text" name="searchboxStudent" ng-model="searchText" value="searchStudent" /><br />
-    <div ng-repeat="student in students | filter:searchText">
-        {{student.firstName}}
-        {{student.lastName}}
-        {{student.gender}}
-        {{student.entryDate | date:'dd/MM/yyyy'}}
-    </div>
+<input type="text" name="searchboxStudent" ng-model="searchText" ng-change="search()" /><br/>
+<div ng-repeat="student in filterList">
+    {{student.firstName}}
+    {{student.lastName}}
+    {{student.gender}}
+    {{student.entryDate | date:'dd/MM/yyyy'}}
+</div>
 </body>
 </html>

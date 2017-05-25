@@ -3,6 +3,15 @@
     "LocalStorageModule"
 ]);
 
+app.run(function(localStorageService, $state) {
+
+    var currentStudents = angular.fromJson(localStorageService.get("students"));
+    if (currentStudents == null) {
+        var students = [];
+        localStorageService.set("students", angular.toJson(students));
+    }
+});
+
 app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
     $stateProvider
@@ -57,7 +66,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
             <input type="text" ng-model="inputLastName"/><br/>
              Grade (must be between 1 and 5):<br/>
             <input type="number" ng-model="inputGrade"/><br/>
-            <button ng-click="submit()" ng-disabled="inputName.length===0 || inputLastName.length===0 || !parseInt(inputGrade) || inputGrade < 1 || inputGrade > 5">Add</button><br/>
+            <button ng-click="submit()" ng-disabled="inputName===null || inputLastName===null || inputName.length===0 || inputLastName.length===0 || !parseInt(inputGrade) || inputGrade < 1 || inputGrade > 5">Add</button><br/>
             <button ui-sref="list-all">Back to students</button>
          `
             });
