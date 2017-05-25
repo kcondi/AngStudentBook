@@ -33,13 +33,9 @@ app.controller("StudentBookController",
                 !$scope.femalesHidden && student.gender === "female";
         }
 
-        $scope.search = function() {
-            $scope.filterList=_.filter($scope.students,
-                function(student) {
-                    return _.includes(student, $scope.searchText);
-                }
 
-            );
-            console.log($scope.filterList);
+        $scope.search = function() {
+            $scope.filterList = _.filter($scope.students,
+                student => student.firstName.includes($scope.searchText) || student.lastName.includes($scope.searchText));
         };
     });
