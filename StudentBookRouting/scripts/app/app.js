@@ -59,15 +59,17 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
                 url: "/add-student",
                 controller: "AddStudentController",
                 template: `
+            <form novalidate name="addStudentForm">
             Add a student <br/>
             First name:<br/>
-            <input type="text" ng-model="inputName"/><br/>
+            <input type="text" ng-model="inputName" required/><br/>
             Last name:<br/>
-            <input type="text" ng-model="inputLastName"/><br/>
+            <input type="text" ng-model="inputLastName" required/><br/>
              Grade (must be between 1 and 5):<br/>
-            <input type="number" ng-model="inputGrade"/><br/>
-            <button ng-click="submit()" ng-disabled="inputName===null || inputLastName===null || inputName.length===0 || inputLastName.length===0 || !parseInt(inputGrade) || inputGrade < 1 || inputGrade > 5">Add</button><br/>
+            <input type="number" ng-model="inputGrade" required/><br/>
+            <button ng-click="submit()" ng-disabled="addStudentForm.$invalid || !parseInt(inputGrade) || inputGrade < 1 || inputGrade > 5">Add</button><br/>
             <button ui-sref="list-all">Back to students</button>
+            </form>
          `
             });
 });
@@ -107,10 +109,10 @@ app.controller("AddStudentController",
                     lastName: $scope.inputLastName,
                     grade: $scope.inputGrade
                 });
+            localStorageService.set("students", angular.toJson(allStudents));
             $scope.inputName = "";
             $scope.inputLastName = "";
             $scope.inputGrade = null;
-            localStorageService.set("students", angular.toJson(allStudents));
         }
     });
 
